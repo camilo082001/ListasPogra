@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author carloaiza
+ * @author camilo
  */
 public class Nodo implements Serializable{
     private Infante dato;

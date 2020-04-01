@@ -56,6 +56,7 @@
                                 <f:selectItem itemLabel="SI" itemValue="1"/>
                                 <f:selectItem itemLabel="NO" itemValue="0"/>
                             </p:selectOneMenu>
+                         <h:outputText value="Promedio: #{sesionInfante.listaInfantes.promedioInfantes()}"/>
                         </p:panelGrid>
                         <p:commandButton value="Guardar" update="frmInfante,:grwlErrores"
                                          action="#{sesionInfante.guardarInfante()}" disabled="#{sesionInfante.deshabilitarFormulario}"/>

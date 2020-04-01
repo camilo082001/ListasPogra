@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  *
- * @author carloaiza
+ * @author camilo
  */
 public class ListaSE implements Serializable{
     private Nodo cabeza;
@@ -141,8 +141,28 @@ public class ListaSE implements Serializable{
         while (temp.getSiguiente() != null){
             contra.adicionarNodoAlInicio(temp.getDato());
             temp = temp.getSiguiente();
+            
         }
+        contra.adicionarNodoAlInicio(temp.getDato());
+          
         return contra;
+    }
+    public float promedioInfantes() {
+        float suma = 0;
+//        while(listaInfantes.){
+
+//        for (int i=0;i<=listaInfantes.contarNodos();i++){
+//            suma=listaInfantes.
+//        }
+        Nodo temp = cabeza;
+        while (temp.getSiguiente() != null) {
+            temp = temp.getSiguiente();
+            suma=suma+temp.getDato().getEdad();
+        }
+        suma=suma+temp.getDato().getEdad();
+        temp = temp.getSiguiente();
+        return suma/contarNodos();
+
     }
 
     
