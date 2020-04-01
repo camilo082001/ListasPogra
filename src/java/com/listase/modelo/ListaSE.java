@@ -7,6 +7,7 @@ package com.listase.modelo;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -131,5 +132,18 @@ public class ListaSE implements Serializable{
         }
         
     }
+    
+
+    public ListaSE obtenerListaInvertida(){
+        ListaSE contra = new ListaSE();
+        Nodo temp = cabeza;
+
+        while (temp.getSiguiente() != null){
+            contra.adicionarNodoAlInicio(temp.getDato());
+            temp = temp.getSiguiente();
+        }
+        return contra;
+    }
+
     
 }

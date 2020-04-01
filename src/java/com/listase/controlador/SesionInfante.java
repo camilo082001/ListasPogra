@@ -230,6 +230,12 @@ public class SesionInfante implements Serializable {
             infante=ayudante.getDato();
         }
     }
+     public void invertirLista()
+    {
+       listaInfantes.obtenerListaInvertida();
+                 
+          
+    }
     
     public void cambiarVistaInfantes()
     {
