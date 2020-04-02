@@ -132,8 +132,6 @@ public class ListaSE implements Serializable{
         }
         
     }
-    
-
     public ListaSE obtenerListaInvertida(){
         ListaSE contra = new ListaSE();
         Nodo temp = cabeza;
@@ -147,6 +145,7 @@ public class ListaSE implements Serializable{
           
         return contra;
     }
+    
 ////    public double promedioInfantes() {
 ////        float suma = 0;
 ////        float conta=0;

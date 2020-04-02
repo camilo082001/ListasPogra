@@ -197,6 +197,28 @@ public class SesionInfante implements Serializable {
         deshabilitarFormulario = false;
         infante = new Infante();
     }
+    
+    public short contarNiñas(){
+        short conta=0;
+        Nodo temp = listaInfantes.getCabeza();
+        while (temp != null){
+            if (temp.getDato().getGenero()=="Niñas")
+                conta++;
+            temp=temp.getSiguiente();
+        }
+        return conta;
+    }
+
+    public short contarNiños(){
+        short conta=0;
+        Nodo temp = listaInfantes.getCabeza();
+        while (temp != null){
+            if (temp.getDato().getGenero()=="Niños")
+                conta++;
+            temp=temp.getSiguiente();
+        }
+        return conta;
+    }
 
     public void irSiguiente() {
         if (ayudante.getSiguiente() != null) {
