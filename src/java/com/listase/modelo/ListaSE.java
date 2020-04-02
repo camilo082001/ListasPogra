@@ -147,23 +147,20 @@ public class ListaSE implements Serializable{
           
         return contra;
     }
-    public float promedioInfantes() {
-        float suma = 0;
-//        while(listaInfantes.){
-
-//        for (int i=0;i<=listaInfantes.contarNodos();i++){
-//            suma=listaInfantes.
-//        }
-        Nodo temp = cabeza;
-        while (temp.getSiguiente() != null) {
-            temp = temp.getSiguiente();
-            suma=suma+temp.getDato().getEdad();
-        }
-        suma=suma+temp.getDato().getEdad();
-        temp = temp.getSiguiente();
-        return suma/contarNodos();
-
-    }
+////    public double promedioInfantes() {
+////        float suma = 0;
+////        float conta=0;
+////        Nodo temp = cabeza;
+////        while (temp.getSiguiente() != null) {
+////            conta++;
+////            temp = temp.getSiguiente();
+////            suma=suma+temp.getDato().getEdad();
+////        }
+////        suma=suma+temp.getDato().getEdad();
+////        temp = temp.getSiguiente();
+////        return (float) (suma/contarNodos());
+//
+//    }
 
     
 }

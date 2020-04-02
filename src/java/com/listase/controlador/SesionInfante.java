@@ -38,7 +38,7 @@ public class SesionInfante implements Serializable {
     private boolean deshabilitarFormulario = true;
     private Nodo ayudante;
     private String textoVista = "Gráfico";
-
+    
     private List listadoInfantes;
 
     private DefaultDiagramModel model;
@@ -53,10 +53,10 @@ public class SesionInfante implements Serializable {
     private void inicializar() {
         listaInfantes = new ListaSE();
         //LLenado de la bds
-        listaInfantes.adicionarNodo(new Infante("Carlitos", (short) 1, (byte) 2));
-        listaInfantes.adicionarNodo(new Infante("Juanita", (short) 2, (byte) 3));
-        listaInfantes.adicionarNodo(new Infante("Martina", (short) 3, (byte) 1));
-        listaInfantes.adicionarNodoAlInicio(new Infante("Mariana", (short) 4, (byte) 5));
+        listaInfantes.adicionarNodo(new Infante("Carlitos", (short) 1, (byte) 2, "Niña"));
+        listaInfantes.adicionarNodo(new Infante("Juanita", (short) 2, (byte) 3, "Niña"));
+        listaInfantes.adicionarNodo(new Infante("Martina", (short) 3, (byte) 1, "Niña"));
+        listaInfantes.adicionarNodoAlInicio(new Infante("Mariana", (short) 4, (byte) 5, "Niña"));
         ayudante = listaInfantes.getCabeza();
         infante = ayudante.getDato();
         //Me llena el objeto List para la tabla
@@ -118,8 +118,8 @@ public class SesionInfante implements Serializable {
         }
 
         return conn;
-    }
-
+    }//Grafico
+    //metodos de acesso
     public String getTextoVista() {
         return textoVista;
     }
@@ -167,7 +167,19 @@ public class SesionInfante implements Serializable {
     public void setInfante(Infante infante) {
         this.infante = infante;
     }
-
+    
+    public double obtenerPromedio() {
+        float conta = 0; 
+        float suma = 0;
+        Nodo temp = listaInfantes.getCabeza();
+        while (temp != null) {
+            conta++;
+            suma += temp.getDato().getEdad();
+            temp = temp.getSiguiente();
+        }
+        return (float)(suma/conta);
+    }
+    
     public void guardarInfante() {
         infante.setCodigo((short) (listaInfantes.contarNodos() + 1));
         if (alInicio.compareTo("1") == 0) {
