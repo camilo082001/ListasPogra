@@ -5,17 +5,16 @@
  */
 package com.listase.modelo;
 
-import java.io.Serializable;
-
 /**
  *
  * @author carloaiza
  */
-public class Nodo implements Serializable{
+public class NodoDE {
     private Infante dato;
-    private Nodo siguiente;
+    private NodoDE siguiente;
+    private NodoDE anterior;
 
-    public Nodo(Infante dato) {
+    public NodoDE(Infante dato) {
         this.dato = dato;
     }
 
@@ -27,13 +26,22 @@ public class Nodo implements Serializable{
         this.dato = dato;
     }
 
-    public Nodo getSiguiente() {
+    public NodoDE getSiguiente() {
         return siguiente;
     }
 
-    public void setSiguiente(Nodo siguiente) {
+    public void setSiguiente(NodoDE siguiente) {
         this.siguiente = siguiente;
     }
+
+    public NodoDE getAnterior() {
+        return anterior;
+    }
+
+    public void setAnterior(NodoDE anterior) {
+        this.anterior = anterior;
+    }
+    
     
     
 }

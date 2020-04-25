@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+        <style type="text/css">
+            .ui-diagram-element {   
+                width:8em; 
+                height:3em;     
+                line-height:3em;
+                text-align: center;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.8);
+                border-radius: 4px;
+                border: 1px solid transparent;
+                background-color: #98AFC7;
+                color: #ffffff;
+            }
+
+            .ui-diagram-success {
+                background-color: #9CB071;
+                color: #ffffff;
+                border-color: #7ab02c;
+            }
+
+            .ui-diagram-fail {
+                background-color: #C34A2C;
+                color: #ffffff;
+            }
+
+            .flow-label {
+                font-size: 24px;
+                font-weight: bold;
+                color: #816A51;
+            }
+        </style>
+    </h:head>
+    <h:body>
+        <p:growl id="grwlErrores"/>
+        <h:form id="frmPiloto">
+            <p:commandButton value="Volver" action="inicio" />
+            <p:panel header="Lista De Pilotos Registrados - Total Pilotos #{sesionPiloto.listaPiloto.contarNodos()}">
+                <p:panelGrid columns="2">
+                    <p:panel header="Datos Piloto">
+
+                        <p:panelGrid columns="2">
+                            <p:outputLabel for="txtNombre" value="Nombre"/>
+                            <p:inputText id="txtNombre" required="true" disabled="#{sesionPiloto.deshabilitarFormulario}"
+                                         value="#{sesionPiloto.piloto.nombre}"   />
+                            <p:outputLabel for="spEdad" value="Edad"/>
+                            <p:spinner id="spEdad" required="true" min="18" max="35" disabled="#{sesionPiloto.deshabilitarFormulario}"
+                                       value="#{sesionPiloto.piloto.edad}"/>
+                            <p:outputLabel for="txtPais" value="Pais"/>
+                            <p:inputText id="txtPais" required="true" disabled="#{sesionPiloto.deshabilitarFormulario}"
+                                         value="#{sesionPiloto.piloto.nacionalidad}"   />
+                             <p:outputLabel for="txtMoto" value="Moto"/>
+                            <p:inputText id="txtMoto" required="true" disabled="#{sesionPiloto.deshabilitarFormulario}"
+                                         value="#{sesionPiloto.piloto.moto}"   />
+          
+                            
+                            <p:outputLabel value="Al inicio"/>
+                            <p:selectOneMenu value="#{sesionPiloto.alInicio}" disabled="#{sesionPiloto.deshabilitarFormulario}">
+                                <f:selectItem itemLabel="SI" itemValue="1"/>
+                                <f:selectItem itemLabel="NO" itemValue="0"/>
+                            </p:selectOneMenu>
+                        </p:panelGrid>
+                        <p:commandButton value="Guardar" update="frmPiloto,:grwlErrores"
+                                         action="#{sesionPiloto.guardarPiloto()}" disabled="#{sesionPiloto.deshabilitarFormulario}"/>
+
+                        <p:commandButton value="Nuevo" update="frmPiloto" action="#{sesionPiloto.habilitarFormulario()}"
+                                         disabled="#{!sesionPiloto.deshabilitarFormulario}"
+                                         />
+                        <p:commandButton value="Invertir"  update="frmPiloto,:grwlErrores"
+                                         action="#{sesionPiloto.invertirLista()}"
+                                         />
+                        <p:panelGrid columns="4">
+                            <p:commandButton value="Primero" action="#{sesionPiloto.irPrimero()}" 
+                                             update="frmPiloto"/>
+                            <p:commandButton value="Anterior" action="#{sesionPiloto.irAnterior()}"
+                                             update="frmPiloto"/>
+                            <p:commandButton value="Siguiente" action="#{sesionPiloto.irSiguiente()}"
+                                             update="frmPiloto"/>       
+                            <p:commandButton value="Último" action="#{sesionPiloto.irUltimo()}" 
+                                             update="frmPiloto"/>                           
+
+                        </p:panelGrid>
+                        <p:outputLabel value="Código a eliminar: "/>
+                        <p:inputText value="#{sesionPiloto.codigoCaida}" maxlength="4" size="10"/>
+                        <p:commandButton value="Eliminar" action="#{sesionPiloto.caidaPiloto()}" 
+                                         update="frmPiloto,:grwlErrores"
+                                         />
+                    </p:panel>
+                    <p:panel header="Reportes">
+                        <p:outputLabel value="Pilotos Registrados Actualmente #{sesionPiloto.listadoPiloto}"/>
+                        <br/>
+                    </p:panel>
+
+
+                </p:panelGrid>
+
+                <p:panel header="Gráfico" id="pnlVista" style="width: 100%;">
+                    <p:commandButton value="#{sesionPiloto.textoVista}" 
+                                     action="#{sesionPiloto.cambiarVistaPiloto()}"
+                                     update="pnlVista"/>
+
+                    <p:dataTable rendered="#{sesionPiloto.textoVista=='Gráfico'}"  value="#{sesionPiloto.listadoPiloto}" var="inf">
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Código"/>
+                            </f:facet>
+                            <p:outputLabel value="#{inf.codigo}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Nombre"/>
+                            </f:facet>
+                            <p:outputLabel value="#{inf.nombre}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Edad"/>
+                            </f:facet>
+                            <p:outputLabel value="#{inf.edad}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Años de Experiencia"/>
+                            </f:facet>
+                            <p:outputLabel value="#{inf.añosExP}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Nacionalidad"/>
+                            </f:facet>
+                            <p:outputLabel value="#{inf.nacionalidad}"/>
+                         </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <p:outputLabel value="Moto"/>
+                            </f:facet>
+                            <p:outputLabel value="#{inf.moto}"/>
+                         </p:column>
+                        
+                       
+                    </p:dataTable>
+
+                    <p:diagram id="diagrama" rendered="#{sesionPiloto.textoVista=='Tabla'}" value="#{sesionPiloto.model}" style="height:600px; width: 100%;" styleClass="ui-widget-content" />
+
+                    <p:remoteCommand name="elementClickRight" 
+                                     actionListener="#{sesionPiloto.onClickRight()}" 
+                                     >
+                    </p:remoteCommand>
+
+                    <script>
+                        $(document).ready(function () {
+                            $('.ui-diagram > .ui-diagram-element').mousedown(function (info) {
+                                if (info.which === 3) {
+                                    elementClickRight([{
+                                            name: 'elementId',
+                                            value: info.target.id
+                                        }]);
+                                }
+                            });
+                        });
+                    </script>
+
+                    <p:contextMenu id="mnuDiagrama" for="diagrama"
+                                   targetFilter=".ui-diagram-element"
+                                   >
+                        <p:menuitem value="Ver datos" 
+                                    action="#{sesionPiloto.obtenerPilotoDiagrama()}" 
+                                    update="panelPiloto"                                    
+                                    oncomplete="PF('dlgDatosPiloto').show();" />
+                        <p:menuitem value="Caida" update="pnlVista"
+                                    action="#{sesionPiloto.caidaPilotoGraficoSesion()}"/>
+                                    
+                        <p:menuitem value="Enviar al final" update="pnlVista"                                    
+                                    action="#{sesionPiloto.enviarAlFinal()}"/>
+                        <p:menuitem value="Enviar al inicio" update="pnlVista"                                    
+                                    action="#{sesionPiloto.enviarAlInicio()}"                                    
+                                    />
+                        <p:menuitem value="Adelantar Posición" update="pnlVista"
+                                    action="#{sesionPiloto.AdelantarPosicion()}"/>
+                        
+                        <p:menuitem value="Perder Posición" update="pnlVista"
+                                    action="#{sesionPiloto.PerderPosicion()}"/>
+                    </p:contextMenu>
+                </p:panel>
+            </p:panel>
+            
+            <p:dialog id="modalPiloto" header="Datos Piloto" widgetVar="dlgDatosPiloto" 
+                      modal="true" height="100">
+                <p:panel id="panelPiloto">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Código:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.codigo}" />
+                        <h:outputText value="Nombre:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.nombre}" />
+                        <h:outputText value="Nacionalidad:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.nacionalidad}" />
+                        <h:outputText value="Edad:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.edad}" />
+                        
+                    </h:panelGrid>
+                    
+                </p:panel>
+            </p:dialog> 
+        </h:form>
+
+    </h:body>
+</html>
+
+
