@@ -11,6 +11,8 @@ import com.listase.modelo.ListaDE;
 import com.listase.modelo.ListaSE;
 import com.listase.modelo.Nodo;
 import com.listase.modelo.NodoDE;
+import com.listase.modelo.Infante;
+import com.listase.modelo.Infante;
 import com.listase.utilidades.JsfUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
@@ -55,6 +57,7 @@ public class SesionInfanteDE implements Serializable {
     private String codigoDeptoSel;
     private short infanteSeleccionado;
     private Infante infanteDiagrama;
+     private short moverInfante;
 
     /**
      * Creates a new instance of SesionInfante
@@ -70,20 +73,28 @@ public class SesionInfanteDE implements Serializable {
 
         listaInfantes = new ListaDE();
         //LLenado de la bds
-        listaInfantes.adicionarNodo(new Infante("Carlitos",(short) 1, (byte)2, true,
+        listaInfantes.adicionarNodo(new Infante("Carlitos", (short) 1, (byte) 2, true,
                 controlLocalidades.getCiudades().get(0).getNombre()));
-        listaInfantes.adicionarNodo(new Infante("Juanita",(short) 2, (byte)3, false,
-        controlLocalidades.getCiudades().get(3).getNombre()));
-        listaInfantes.adicionarNodo(new Infante("Martina",(short) 3, (byte)1,false,
-        controlLocalidades.getCiudades().get(1).getNombre()));
-        listaInfantes.adicionarNodoAlInicio(new Infante("Mariana",(short) 4, (byte)5,false,
-        controlLocalidades.getCiudades().get(2).getNombre()));
+        listaInfantes.adicionarNodo(new Infante("Juanita", (short) 2, (byte) 3, false,
+                controlLocalidades.getCiudades().get(3).getNombre()));
+        listaInfantes.adicionarNodo(new Infante("Martina", (short) 3, (byte) 1, false,
+                controlLocalidades.getCiudades().get(1).getNombre()));
+        listaInfantes.adicionarNodoAlInicio(new Infante("Mariana", (short) 4, (byte) 5, false,
+                controlLocalidades.getCiudades().get(2).getNombre()));
         ayudante = listaInfantes.getCabeza();
-        infante = ayudante.getDato();     
+        infante = ayudante.getDato();
         //Me llena el objeto List para la tabla
         listadoInfantes = listaInfantes.obtenerListaInfantes();
         pintarLista();
-   }
+    }
+
+    public short getMoverInfante() {
+        return moverInfante;
+    }
+
+    public void setMoverInfante(short moverInfante) {
+        this.moverInfante = moverInfante;
+    }
 
     public Infante getInfanteDiagrama() {
         return infanteDiagrama;
@@ -331,8 +342,7 @@ public class SesionInfanteDE implements Serializable {
         }
     }
 
-    public void obtenerInfanteDiagrama()
-    {
+    public void obtenerInfanteDiagrama() {
         try {
             infanteDiagrama = listaInfantes.obtenerInfante(infanteSeleccionado);
         } catch (InfanteExcepcion ex) {
@@ -362,18 +372,34 @@ public class SesionInfanteDE implements Serializable {
 
         }
     }
-     public void eliminarInfanteGrafico() {
-        if (codigoEliminar > 0) {
-            //llamo el eliminar de la lista
-            try {
-                listaInfantes.eliminarInfanteGrafico(codigoEliminar);
-                irPrimero();
-                JsfUtil.addSuccessMessage("Infante " + codigoEliminar + " eliminado.");
-            } catch (InfanteExcepcion e) {
-                JsfUtil.addErrorMessage(e.getMessage());
-            }
-        } else {
-            JsfUtil.addErrorMessage("El código a eliminar " + codigoEliminar + " no es válido");
+    public void adelantarPosicion() throws InfanteExcepcion {
+        try {
+            int posi = listaInfantes.obtenerPosicion(infanteSeleccionado) - moverInfante;
+            short tama = listaInfantes.contarNodos();
+            if (posi > tama || posi < 0) {
+                JsfUtil.addErrorMessage("posicion " + posi + "Invalida");
+            } else {
+                Infante temp = listaInfantes.obtenerInfante(infanteSeleccionado);
+                listaInfantes.eliminarInfante(infanteSeleccionado);
+                listaInfantes.adelantarInfante(temp, (short) posi);
+                pintarLista();
+                JsfUtil.addSuccessMessage("posicion cambiada");
+            }            
+            
+        } catch (InfanteExcepcion ex) {
+            JsfUtil.addErrorMessage(ex.getMessage());
+        }
+        
+    }
+
+    public void eliminarInfanteGraficoSesion() {
+        try {
+            Infante infTemporal = listaInfantes.obtenerInfante(infanteSeleccionado);
+            listaInfantes.eliminarInfante(infanteSeleccionado);
+            pintarLista();
+        } catch (InfanteExcepcion ex) {
+            JsfUtil.addErrorMessage(ex.getMessage());
+
         }
     }
     

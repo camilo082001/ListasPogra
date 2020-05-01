@@ -189,17 +189,23 @@
                                     action="#{sesionInfanteDE.obtenerInfanteDiagrama()}" 
                                     update="panelInfante"                                    
                                     oncomplete="PF('dlgDatosInfante').show();" />
-                        <p:menuitem value="Eliminar" action="#{sesionInfanteDE.eliminarInfanteGrafico()}"/>
+                        <p:menuitem value="Eliminar" 
+                                    action="#{sesionInfanteDE.obtenerInfanteDiagrama()}"
+                                    update="panelEliminarInfante"
+                                    oncomplete="PF('dlgEliminarInfante').show();"/>
                         <p:menuitem value="Enviar al final" update="pnlVista"                                    
                                     action="#{sesionInfanteDE.enviarAlFinal()}"/>
                         <p:menuitem value="Enviar al inicio" update="pnlVista"                                    
                                     action="#{sesionInfanteDE.enviarAlInicio()}"                                    
                                     />
-                        <p:menuitem value="Adelantar/Perder Posición"/>
+                        <p:menuitem value="Adelantar/Perder Posición" update="panelposicionInfantes"
+                                    action="#{sesionInfanteDE.obtenerInfanteDiagrama()}"
+                                    oncomplete="PF('dlgposicionInfantes').show();"/>
+
                     </p:contextMenu>
                 </p:panel>
             </p:panel>
-            
+
             <p:dialog id="modalInfante" header="Datos Infante" widgetVar="dlgDatosInfante" 
                       modal="true" height="100">
                 <p:panel id="panelInfante">
@@ -212,9 +218,53 @@
                         <h:outputText rendered="#{sesionInfanteDE.infanteDiagrama.genero}" value="Masculino" />
                         <h:outputText rendered="#{!sesionInfanteDE.infanteDiagrama.genero}" value="Femenino" />
                     </h:panelGrid>
-                    
+
                 </p:panel>
             </p:dialog> 
+
+            <p:dialog id="modalEliminarInfante" header="Eliminar Infante" widgetVar="dlgEliminarInfante" 
+                      modal="true" height="100">
+                <p:panel id="panelEliminarInfante">
+                    <h:panelGrid columns="2" >
+                        <h:outputText value="¿Desea Eliminar al Infante?" />
+                        <br/>
+                        <h:outputText value="Código:" />
+                        <h:outputText value="#{sesionInfanteDE.infanteDiagrama.codigo}" />
+                        <h:outputText value="Nombre:" />
+                        <h:outputText value="#{sesionInfanteDE.infanteDiagrama.nombre}" />
+
+                        <h:outputText value="Edad:" />
+                        <h:outputText value="#{sesionInfanteDE.infanteDiagrama.edad}" />
+                        <h:outputText value="Género:" />
+                        <h:outputText rendered="#{sesionInfanteDE.infanteDiagrama.genero}" value="Masculino" />
+                        <h:outputText rendered="#{!sesionInfanteDE.infanteDiagrama.genero}" value="Femenino" />
+                    </h:panelGrid>
+                    <p:commandButton value="Aceptar" action="#{sesionInfanteDE.eliminarInfanteGraficoSesion()}" 
+                                     oncomplete="PF('dlgEliminarInfante').hide();" update="pnlVista" />
+                    <p:commandButton value="Cancelar" onclick="PF('dlgEliminarInfante').hide();" />
+                </p:panel>
+            </p:dialog>
+
+            <p:dialog id="modaladelantarperderInfantes" header="Adelantar/ Perder posicion" widgetVar="dlgposicionInfantes" 
+                      modal="true" height="200">
+                <p:panel id="panelposicionInfantes">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Código:" />
+                        <h:outputText value="#{sesionInfanteDE.infanteDiagrama.codigo}" />
+                        <h:outputText value="Nombre:" />
+                        <h:outputText value="#{sesionInfanteDE.infanteDiagrama.nombre}" />
+                        <h:outputText value="Género:" />
+                       <h:outputText rendered="#{sesionInfanteDE.infanteDiagrama.genero}" value="Masculino" />
+                        <h:outputText rendered="#{!sesionInfanteDE.infanteDiagrama.genero}" value="Femenino" />
+
+                        <p:spinner id="spPosicionInfantes" required="true" min="-32767" max="32767" 
+                                   value="#{sesionInfanteDE.moverInfante}"/>
+                    </h:panelGrid>
+                    <p:commandButton value="Aceptar" update="pnlVista,:grwlErrores"
+                                     action="#{sesionInfanteDE.adelantarPosicion()}"/>
+                    <p:commandButton value="Cancelar" onclick="PF('dlgposicionInfantes').hide();"/>
+                </p:panel>
+            </p:dialog>
         </h:form>
 
     </h:body>

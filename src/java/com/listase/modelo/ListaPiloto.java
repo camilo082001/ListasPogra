@@ -7,6 +7,7 @@ package com.listase.modelo;
 
 import com.listase.excepciones.InfanteExcepcion;
 import com.listase.excepciones.PilotoExcepcion1;
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,22 +58,51 @@ public class ListaPiloto implements Serializable {
             cabeza = temp;
         }
     }
-    public void adelantarPiloto(Piloto piloto) {
-        if (cabeza.getSiguiente() != null) {
-            cabeza = cabeza.getSiguiente();
-            piloto = cabeza.getDato();
+
+    public void adelantarPiloto(Piloto nuevo, short posicion) throws PilotoExcepcion1 {
+        if (cabeza != null) {
+            short tam = contarNodos();
+            if (posicion <= 0) {
+                throw new PilotoExcepcion1("la posisicion" + posicion + "no existe");
+
+            } else if (tam + 1 >= posicion) {
+                NodoPiloto temp = cabeza;
+                short cont = 1;
+                while (cont != posicion) {
+                    temp = temp.getSiguiente();
+                    cont++;
+                }
+                if (temp == null) {
+                    adicionarNodo(nuevo);
+                } else if (temp.getAnterior() == null) {
+                    adicionarNodoAlInicio(nuevo);
+                } else {
+                    NodoPiloto tempo = new NodoPiloto(nuevo);
+                    tempo.setAnterior(temp.getAnterior());
+                    tempo.setSiguiente(temp);
+                    
+                    temp.getAnterior().setSiguiente(tempo);
+                    temp.setAnterior(tempo);
+                }
+            } else {
+                throw new PilotoExcepcion1("la posisicion no existe");
+            }
         }
-        
+
     }
-    
+
     public void PerderPosicionPiloto(Piloto piloto) {
         if (cabeza.getAnterior() != null) {
-            cabeza = cabeza.getAnterior();
-            piloto = cabeza.getDato();
+            NodoPiloto temp = cabeza;
+            while (temp.getAnterior() != null) //Mientras que en siguiente exista algo
+            {
+                temp = temp.getAnterior();
+            }
+
+            //temp va estar ubicado en el ultimo nodo
+            temp.getAnterior();
         }
-    }  
-    
-    
+    }
 
     public short contarNodos() {
         if (cabeza == null) {
@@ -191,6 +221,24 @@ public class ListaPiloto implements Serializable {
         }
         throw new PilotoExcepcion1("La lista de piloto está vacía");
     }
+     public short obtenerPosicion(short codigo) throws PilotoExcepcion1 {
+        if (cabeza == null) {
+            throw new PilotoExcepcion1("La lista de piloto está vacía");
+            } else {
+                NodoPiloto temp = cabeza;
+                short cont = 1;
+                while (temp != null) {
+                    if (temp.getDato().getCodigo() == codigo) {
+                        return cont;
+                    }
+                    temp = temp.getSiguiente();
+                    cont++;
+                }
+
+                throw new PilotoExcepcion1("El código " + codigo + " no existe en la lista");
+            }
+        }
+    }
 
 //    public void caidaPilotoGrafico(short codigo) throws PilotoExcepcion1 {
 //        if (cabeza != null) {
@@ -216,9 +264,6 @@ public class ListaPiloto implements Serializable {
 //        }
 //        throw new PilotoExcepcion1("La lista de piloto está vacía");
 //    }
-    
-
-
 //    public void eliminarPiloto(short codigo) {
 //        if (cabeza != null) {
 //            NodoPiloto aux = cabeza;
@@ -244,4 +289,3 @@ public class ListaPiloto implements Serializable {
 //
 //    }
 
-}

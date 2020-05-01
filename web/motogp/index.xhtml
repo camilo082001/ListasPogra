@@ -55,11 +55,11 @@
                             <p:outputLabel for="txtPais" value="Pais"/>
                             <p:inputText id="txtPais" required="true" disabled="#{sesionPiloto.deshabilitarFormulario}"
                                          value="#{sesionPiloto.piloto.nacionalidad}"   />
-                             <p:outputLabel for="txtMoto" value="Moto"/>
+                            <p:outputLabel for="txtMoto" value="Moto"/>
                             <p:inputText id="txtMoto" required="true" disabled="#{sesionPiloto.deshabilitarFormulario}"
                                          value="#{sesionPiloto.piloto.moto}"   />
-          
-                            
+
+
                             <p:outputLabel value="Al inicio"/>
                             <p:selectOneMenu value="#{sesionPiloto.alInicio}" disabled="#{sesionPiloto.deshabilitarFormulario}">
                                 <f:selectItem itemLabel="SI" itemValue="1"/>
@@ -135,15 +135,15 @@
                                 <p:outputLabel value="Nacionalidad"/>
                             </f:facet>
                             <p:outputLabel value="#{inf.nacionalidad}"/>
-                         </p:column>
+                        </p:column>
                         <p:column>
                             <f:facet name="header">
                                 <p:outputLabel value="Moto"/>
                             </f:facet>
                             <p:outputLabel value="#{inf.moto}"/>
-                         </p:column>
-                        
-                       
+                        </p:column>
+
+
                     </p:dataTable>
 
                     <p:diagram id="diagrama" rendered="#{sesionPiloto.textoVista=='Tabla'}" value="#{sesionPiloto.model}" style="height:600px; width: 100%;" styleClass="ui-widget-content" />
@@ -169,27 +169,26 @@
                     <p:contextMenu id="mnuDiagrama" for="diagrama"
                                    targetFilter=".ui-diagram-element"
                                    >
-                        <p:menuitem value="Ver datos" 
+                        <p:menuitem value="Ver datos"  
                                     action="#{sesionPiloto.obtenerPilotoDiagrama()}" 
                                     update="panelPiloto"                                    
                                     oncomplete="PF('dlgDatosPiloto').show();" />
-                        <p:menuitem value="Caida" update="pnlVista"
-                                    action="#{sesionPiloto.caidaPilotoGraficoSesion()}"/>
-                                    
-                        <p:menuitem value="Enviar al final" update="pnlVista"                                    
-                                    action="#{sesionPiloto.enviarAlFinal()}"/>
-                        <p:menuitem value="Enviar al inicio" update="pnlVista"                                    
-                                    action="#{sesionPiloto.enviarAlInicio()}"                                    
-                                    />
-                        <p:menuitem value="Adelantar Posición" update="pnlVista"
-                                    action="#{sesionPiloto.AdelantarPosicion()}"/>
-                        
-                        <p:menuitem value="Perder Posición" update="pnlVista"
-                                    action="#{sesionPiloto.PerderPosicion()}"/>
+                        <p:menuitem value="Caida" update="panelEliminarPiloto" 
+                                    action="#{sesionPiloto.obtenerPilotoDiagrama()}" 
+                                    oncomplete="PF('dlgEliminarPiloto').show();"/>
+
+                            <p:menuitem value="Enviar al final" update="pnlVista"                                    
+                                        action="#{sesionPiloto.enviarAlFinal()}"/>
+                            <p:menuitem value="Enviar al inicio" update="pnlVista"                                    
+                                        action="#{sesionPiloto.enviarAlInicio()}"                                    
+                                        />
+                            <p:menuitem value="Adelantar/Perder Posición" update="panelposicionPiloto"
+                                        action="#{sesionPiloto.obtenerPilotoDiagrama()}"
+                                        oncomplete="PF('dlgposicionPiloto').show();"/>
                     </p:contextMenu>
                 </p:panel>
             </p:panel>
-            
+
             <p:dialog id="modalPiloto" header="Datos Piloto" widgetVar="dlgDatosPiloto" 
                       modal="true" height="100">
                 <p:panel id="panelPiloto">
@@ -202,11 +201,49 @@
                         <h:outputText value="#{sesionPiloto.pilotoDiagrama.nacionalidad}" />
                         <h:outputText value="Edad:" />
                         <h:outputText value="#{sesionPiloto.pilotoDiagrama.edad}" />
-                        
+
                     </h:panelGrid>
-                    
+
                 </p:panel>
             </p:dialog> 
+            <p:dialog id="modalEliminarPiloto" header="Eliminar Piloto" widgetVar="dlgEliminarPiloto" 
+                      modal="true" height="100">
+                <p:panel id="panelEliminarPiloto">
+                    <h:panelGrid columns="2" >
+                        <h:outputText value="¿Desea que se caiga el Piloto?" />
+                        <br/>
+                        <h:outputText value="Código:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.codigo}" />
+                        <h:outputText value="Nombre:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.nombre}" />
+                        <h:outputText value="Nacionalidad:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.nacionalidad}" />
+                        <h:outputText value="Edad:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.edad}" />
+                    </h:panelGrid>
+                    <p:commandButton value="Aceptar" action="#{sesionPiloto.caidaPilotoGraficoSesion()}" 
+                                     oncomplete="PF('dlgEliminarPiloto').hide();" update="pnlVista" />
+                    <p:commandButton value="Cancelar" onclick="PF('dlgEliminarPiloto').hide();" />
+                </p:panel>
+            </p:dialog>
+            <p:dialog id="modaladelantarperderPiloto" header="Adelantar/ Perder posicion" widgetVar="dlgposicionPiloto" 
+                      modal="true" height="200">
+                <p:panel id="panelposicionPiloto">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Código:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.codigo}" />
+                        <h:outputText value="Nombre:" />
+                        <h:outputText value="#{sesionPiloto.pilotoDiagrama.nombre}" />
+                        <p:spinner id="spPosicionPiloto" required="true" min="-32767" max="32767" 
+                                   value="#{sesionPiloto.moverPiloto}"/>
+                                     
+                    </h:panelGrid>
+                    
+                    <p:commandButton value="Aceptar" update="pnlVista,:grwlErrores"
+                                     action="#{sesionPiloto.adelantarPosicion()}"/>
+                     <p:commandButton value="Cancelar" onclick="PF('dlgposicionPiloto').hide();"/>
+                </p:panel>
+            </p:dialog>
         </h:form>
 
     </h:body>
