@@ -18,6 +18,8 @@
                 background-color: #98AFC7;
                 color: #ffffff;
             }
+            .ui-diagram-menorEdad {
+                background-color: #90fc03;
 
             .ui-diagram-success {
                 background-color: #9CB071;
@@ -185,6 +187,10 @@
                             <p:menuitem value="Adelantar/Perder Posición" update="panelposicionPiloto"
                                         action="#{sesionPiloto.obtenerPilotoDiagrama()}"
                                         oncomplete="PF('dlgposicionPiloto').show();"/>
+                            <p:menuitem value="Ver menor Edad"
+                                   action="#{sesionPiloto.pintarListaMenorEdad()}"
+                                   update="panelPilotoMenorEdad,pnlVista"
+                                   oncomplete="PF('dlgDatosPilotoMenorEdad').show();"/>
                     </p:contextMenu>
                 </p:panel>
             </p:panel>
@@ -242,6 +248,21 @@
                     <p:commandButton value="Aceptar" update="pnlVista,:grwlErrores"
                                      action="#{sesionPiloto.adelantarPosicion()}"/>
                      <p:commandButton value="Cancelar" onclick="PF('dlgposicionPiloto').hide();"/>
+                </p:panel>
+            </p:dialog>
+            <p:dialog id="modalPilotoMenorEdad" header="Datos Piloto" widgetVar="dlgDatosPilotoMenorEdad" 
+                      modal="true" height="100">
+                <p:panel id="panelPilotoMenorEdad">
+                    <h:panelGrid columns="2">
+                        <h:outputText value="Código:" />
+                        <h:outputText value="#{sesionPiloto.pilotoMenorEdad.codigo}" />
+                        <h:outputText value="Nombre:" />
+                        <h:outputText value="#{sesionPiloto.pilotoMenorEdad.nombre}" />
+                        
+                    </h:panelGrid>
+                    <p:commandButton value="Aceptar" onclick="PF('dlgDatosPilotoMenorEdad').hide();" />
+
+                    
                 </p:panel>
             </p:dialog>
         </h:form>

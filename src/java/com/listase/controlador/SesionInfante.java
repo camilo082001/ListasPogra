@@ -54,6 +54,7 @@ public class SesionInfante implements Serializable {
     private String codigoDeptoSel;
     private short infanteSeleccionado;
     private Infante infanteDiagrama;
+    private Infante infanteMenorEdad;
 
     /**
      * Creates a new instance of SesionInfante
@@ -82,6 +83,14 @@ public class SesionInfante implements Serializable {
         //Me llena el objeto List para la tabla
         listadoInfantes = listaInfantes.obtenerListaInfantes();
         pintarLista();
+    }
+
+    public Infante getInfanteMenorEdad() {
+        return infanteMenorEdad;
+    }
+
+    public void setInfanteMenorEdad(Infante infanteMenorEdad) {
+        this.infanteMenorEdad = infanteMenorEdad;
     }
 
     public Infante getInfanteDiagrama() {
@@ -293,6 +302,70 @@ public class SesionInfante implements Serializable {
 
         }
     }
+    public void pintarListaMenorEdad() {
+        //Instancia el modelo
+        model = new DefaultDiagramModel();
+        //Se establece para que el diagrama pueda tener infinitas flechas
+        model.setMaxConnections(-1);
+
+        StateMachineConnector connector = new StateMachineConnector();
+        connector.setOrientation(StateMachineConnector.Orientation.ANTICLOCKWISE);
+        connector.setPaintStyle("{strokeStyle:'#7D7463',lineWidth:3}");
+        model.setDefaultConnector(connector);
+
+        ///Adicionar los elementos
+        if (listaInfantes.getCabeza() != null) {
+            //llamo a mi ayudante
+            Nodo temp = listaInfantes.getCabeza();
+            int posX = 2;
+            int posY = 2;
+            
+            byte menorEdad = 0;
+            
+            try {
+                menorEdad = listaInfantes.obtenerInfanteEdadMenor();
+            } catch (InfanteExcepcion ex) {
+                JsfUtil.addErrorMessage(ex.getMessage());
+            }
+            //recorro la lista de principio a fin
+            while (temp != null) {
+                //Parado en un elemento
+                //Crea el cuadrito y lo adiciona al modelo
+                Element ele = new Element(temp.getDato().getCodigo() + " "
+                        + temp.getDato().getNombre(),
+                        posX + "em", posY + "em");
+                ele.setId(String.valueOf(temp.getDato().getCodigo()));
+                //adiciona un conector al cuadrito
+                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.TOP));
+                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_RIGHT));
+
+                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_LEFT));
+                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM));
+                
+                if (temp.getDato().getEdad() == menorEdad){
+                    ele.setStyleClass("ui-diagram-menorEdad");
+                    infanteMenorEdad = temp.getDato();
+                }
+                    
+
+                model.addElement(ele);
+                temp = temp.getSiguiente();
+                posX = posX + 5;
+                posY = posY + 6;
+            }
+
+            //Pinta las flechas            
+            for (int i = 0; i < model.getElements().size() - 1; i++) {
+                model.connect(createConnection(model.getElements().get(i).getEndPoints().get(1),
+                        model.getElements().get(i + 1).getEndPoints().get(0), "Sig"));
+
+                model.connect(createConnection(model.getElements().get(i + 1).getEndPoints().get(2),
+                        model.getElements().get(i).getEndPoints().get(3), "Ant"));
+            }
+
+        }
+    }
+    
 
     public void onClickRight() {
         String id = FacesContext.getCurrentInstance().getExternalContext()
@@ -344,6 +417,16 @@ public class SesionInfante implements Serializable {
             pintarLista();
         } catch (InfanteExcepcion ex) {
             JsfUtil.addErrorMessage(ex.getMessage());
+        }
+    }
+    public void eliminarInfanteGraficoSesion() {
+        try {
+            Infante infTemporal = listaInfantes.buscarInfante(infanteSeleccionado);
+            listaInfantes.eliminarInfante(infanteSeleccionado);
+            pintarLista();
+        } catch (InfanteExcepcion ex) {
+            JsfUtil.addErrorMessage(ex.getMessage());
+
         }
     }
 

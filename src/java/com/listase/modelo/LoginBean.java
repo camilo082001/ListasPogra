@@ -22,12 +22,6 @@ public class LoginBean implements Serializable {
     //Atributo para ocultar o visualizar el panel del login
     private boolean verPanelLogin=false;
     
-    //Atributo para capturar el texto para mostrar en el saludo
-    private String textoSaludo="";
-    
-    //Atributo contador para los saludos
-    private short contadorSaludos=0;
-    
     //Atributo String correo
     private String correo="camilo@umanizales.edu.co";
     
@@ -51,9 +45,7 @@ public class LoginBean implements Serializable {
     public void setUsuarioAutenticado(Usuario usuarioAutenticado) {
         this.usuarioAutenticado = usuarioAutenticado;
     }
-
-    
-    
+  
     public String getCorreo() {
         return correo;
     }
@@ -79,29 +71,7 @@ public class LoginBean implements Serializable {
     public void setVerPanelLogin(boolean verPanelLogin) {
         this.verPanelLogin = verPanelLogin;
     }
-
-    public String getTextoSaludo() {
-        return textoSaludo;
-    }
-
-    public void setTextoSaludo(String textoSaludo) {
-        this.textoSaludo = textoSaludo;
-    }
-
-    public short getContadorSaludos() {
-        return contadorSaludos;
-    }
-
-    public void setContadorSaludos(short contadorSaludos) {
-        this.contadorSaludos = contadorSaludos;
-    }
-    
-    public void aumentarContadorSaludos()
-    {
-        contadorSaludos ++;
-    }
-    
-    
+  
     //Método para cambiar el valor de la variable y ocultar o mostrar el panel
     public void habilitarOdeshabilitarLogin()
     {
@@ -118,7 +88,7 @@ public class LoginBean implements Serializable {
             if(usuarioEncontrado.getContrasenia().equals(contrasenia))
             {                
                 usuarioAutenticado= usuarioEncontrado;
-                return "home";
+                return "inicioListas";
             }           
         }
         

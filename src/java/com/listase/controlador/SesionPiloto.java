@@ -7,6 +7,7 @@ package com.listase.controlador;
 
 import com.listase.excepciones.PilotoExcepcion1;
 import com.listase.modelo.ListaPiloto;
+import com.listase.modelo.NodoDE;
 import com.listase.modelo.NodoPiloto;
 import com.listase.modelo.Piloto;
 import com.listase.modelo.Usuario;
@@ -54,9 +55,10 @@ public class SesionPiloto implements Serializable {
     private short pilotoSeleccionado;
     private Piloto pilotoDiagrama;
     private short moverPiloto;
+    private Piloto pilotoMenorEdad;
 
     /**
-     * Creates a new instance of SesionInfante
+     * Creates a new instance of SesionPiloto
      */
     public SesionPiloto() {
     }
@@ -77,6 +79,17 @@ public class SesionPiloto implements Serializable {
         pintarLista();
     }
     //metodos de acesso
+
+    public Piloto getPilotoMenorEdad() {
+        return pilotoMenorEdad;
+    }
+
+    public void setPilotoMenorEdad(Piloto pilotoMenorEdad) {
+        this.pilotoMenorEdad = pilotoMenorEdad;
+    }
+
+    
+    
 
     public short getMoverPiloto() {
         return moverPiloto;
@@ -292,6 +305,69 @@ public class SesionPiloto implements Serializable {
                         model.getElements().get(i).getEndPoints().get(3), "Ant"));
             }
             
+        }
+    }
+     public void pintarListaMenorEdad() {
+        //Instancia el modelo
+        model = new DefaultDiagramModel();
+        //Se establece para que el diagrama pueda tener infinitas flechas
+        model.setMaxConnections(-1);
+
+        StateMachineConnector connector = new StateMachineConnector();
+        connector.setOrientation(StateMachineConnector.Orientation.ANTICLOCKWISE);
+        connector.setPaintStyle("{strokeStyle:'#7D7463',lineWidth:3}");
+        model.setDefaultConnector(connector);
+
+        ///Adicionar los elementos
+        if (listaPiloto.getCabeza() != null) {
+            //llamo a mi ayudante
+            NodoPiloto temp = listaPiloto.getCabeza();
+            int posX = 2;
+            int posY = 2;
+            
+            byte menorEdad = 0;
+            
+            try {
+                menorEdad = listaPiloto.obtenerPilotoEdadMenor();
+            } catch (PilotoExcepcion1 ex) {
+                JsfUtil.addErrorMessage(ex.getMessage());
+            }
+            //recorro la lista de principio a fin
+            while (temp != null) {
+                //Parado en un elemento
+                //Crea el cuadrito y lo adiciona al modelo
+                Element ele = new Element(temp.getDato().getCodigo() + " "
+                        + temp.getDato().getNombre(),
+                        posX + "em", posY + "em");
+                ele.setId(String.valueOf(temp.getDato().getCodigo()));
+                //adiciona un conector al cuadrito
+                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.TOP));
+                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_RIGHT));
+
+                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_LEFT));
+                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM));
+                
+                if (temp.getDato().getEdad() == menorEdad){
+                    ele.setStyleClass("ui-diagram-menorEdad");
+                    pilotoMenorEdad = temp.getDato();
+                }
+                    
+
+                model.addElement(ele);
+                temp = temp.getSiguiente();
+                posX = posX + 5;
+                posY = posY + 6;
+            }
+
+            //Pinta las flechas            
+            for (int i = 0; i < model.getElements().size() - 1; i++) {
+                model.connect(createConnection(model.getElements().get(i).getEndPoints().get(1),
+                        model.getElements().get(i + 1).getEndPoints().get(0), "Sig"));
+
+                model.connect(createConnection(model.getElements().get(i + 1).getEndPoints().get(2),
+                        model.getElements().get(i).getEndPoints().get(3), "Ant"));
+            }
+
         }
     }
     

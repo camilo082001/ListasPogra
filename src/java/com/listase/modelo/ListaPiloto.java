@@ -158,6 +158,20 @@ public class ListaPiloto implements Serializable {
         }
 
     }
+    public byte obtenerPilotoEdadMenor() throws PilotoExcepcion1 {
+        if (cabeza == null) {
+            throw new PilotoExcepcion1("La lista de pilotos está vacía");
+        } else{
+            NodoPiloto temp=cabeza;
+            byte menor=temp.getDato().getEdad();
+            while (temp!=null){
+                if(temp.getDato().getEdad()<menor)
+                    menor=temp.getDato().getEdad();
+                temp=temp.getSiguiente();
+            }
+            return menor;
+        }
+    }
 
     public void invertirLista() {
         if (cabeza != null) {

@@ -128,6 +128,20 @@ public class ListaDE implements Serializable {
         return 0;
 
     }
+    public byte obtenerInfanteEdadMenor() throws InfanteExcepcion {
+        if (cabeza == null) {
+            throw new InfanteExcepcion("La lista de infantes está vacía");
+        } else{
+            NodoDE temp=cabeza;
+            byte menor=temp.getDato().getEdad();
+            while (temp!=null){
+                if(temp.getDato().getEdad()<menor)
+                    menor=temp.getDato().getEdad();
+                temp=temp.getSiguiente();
+            }
+            return menor;
+        }
+    }
 
     public void invertirLista() {
         if (cabeza != null) {
@@ -210,31 +224,31 @@ public class ListaDE implements Serializable {
         throw new InfanteExcepcion("La lista de infantes está vacía");
     }
 
-    public void eliminarInfanteGrafico(short codigo) throws InfanteExcepcion {
-        if (cabeza != null) {
-            if (cabeza.getDato().getCodigo() == codigo) {
-                cabeza = cabeza.getSiguiente();
-
-                return;
-            } else {
-                NodoDE temp = cabeza;
-                while (temp.getSiguiente() != null) {
-                    if (temp.getSiguiente().getDato().getCodigo() == codigo) {
-                        //el que sigue es el que hay que eliminar
-                        temp.setSiguiente(temp.getSiguiente().getSiguiente());
-                        if (temp.getSiguiente() != null) {
-                            temp.getSiguiente();
-                        }
-                        return;
-                    }
-                    temp = temp.getSiguiente();
-                }
-
-                throw new InfanteExcepcion("El código " + codigo + " no existe en la lista");
-            }
-        }
-        throw new InfanteExcepcion("La lista de infantes está vacía");
-    }
+//    public void eliminarInfanteGrafico(short codigo) throws InfanteExcepcion {
+//        if (cabeza != null) {
+//            if (cabeza.getDato().getCodigo() == codigo) {
+//                cabeza = cabeza.getSiguiente();
+//
+//                return;
+//            } else {
+//                NodoDE temp = cabeza;
+//                while (temp.getSiguiente() != null) {
+//                    if (temp.getSiguiente().getDato().getCodigo() == codigo) {
+//                        //el que sigue es el que hay que eliminar
+//                        temp.setSiguiente(temp.getSiguiente().getSiguiente());
+//                        if (temp.getSiguiente() != null) {
+//                            temp.getSiguiente();
+//                        }
+//                        return;
+//                    }
+//                    temp = temp.getSiguiente();
+//                }
+//
+//                throw new InfanteExcepcion("El código " + codigo + " no existe en la lista");
+//            }
+//        }
+//        throw new InfanteExcepcion("La lista de infantes está vacía");
+//    }
 
     public void adelantarInfante(Infante nuevo, short posicion) throws InfanteExcepcion {
         if (cabeza != null) {
