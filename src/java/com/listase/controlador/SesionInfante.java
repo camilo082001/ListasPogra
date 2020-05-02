@@ -339,8 +339,8 @@ public class SesionInfante implements Serializable {
                 ele.addEndPoint(new BlankEndPoint(EndPointAnchor.TOP));
                 ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_RIGHT));
 
-                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_LEFT));
-                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM));
+//                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM_LEFT));
+//                ele.addEndPoint(new BlankEndPoint(EndPointAnchor.BOTTOM));
                 
                 if (temp.getDato().getEdad() == menorEdad){
                     ele.setStyleClass("ui-diagram-menorEdad");
@@ -359,8 +359,8 @@ public class SesionInfante implements Serializable {
                 model.connect(createConnection(model.getElements().get(i).getEndPoints().get(1),
                         model.getElements().get(i + 1).getEndPoints().get(0), "Sig"));
 
-                model.connect(createConnection(model.getElements().get(i + 1).getEndPoints().get(2),
-                        model.getElements().get(i).getEndPoints().get(3), "Ant"));
+//                model.connect(createConnection(model.getElements().get(i + 1).getEndPoints().get(2),
+//                        model.getElements().get(i).getEndPoints().get(3), "Ant"));
             }
 
         }
